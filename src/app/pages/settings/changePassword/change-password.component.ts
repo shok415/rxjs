@@ -21,6 +21,7 @@ export class ChangePasswordComponent implements OnInit {
 
   changePsw(ev: Event): void {
 
+    
     if (this.newPsw !== this.newPswRepeat) {
       this.messageService.add({ severity: 'error', summary: 'Пароли не совпадают' });
     } else {
@@ -30,9 +31,13 @@ export class ChangePasswordComponent implements OnInit {
         userInStore = JSON.parse(window.localStorage.getItem('user_' + i) || '{}')
         if (userInStore) {
           if (this.user.login === userInStore.login) {
-            userInStore.password = this.newPsw;
-            localStorage.setItem('user_' + i, JSON.stringify(userInStore));
-            this.messageService.add({ severity: 'success', summary: 'Пароль изменен' });
+            if (this.currentPsw !== userInStore.password){
+              this.messageService.add({ severity: 'error', summary: 'Неккоректный текущий пароль' });
+            }else{
+              userInStore.password = this.newPsw;
+              localStorage.setItem('user_' + i, JSON.stringify(userInStore));
+              this.messageService.add({ severity: 'success', summary: 'Пароль изменен' });
+            }
           }
         }
       }
