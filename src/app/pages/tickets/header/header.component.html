@@ -1,0 +1,12 @@
+<div class="d-flex">
+    <div class="flex-grow-1">
+        <p-menubar [model]="items"></p-menubar>
+    </div>
+    
+    <div class="time-block">
+        <div></div>
+        <div class="timer-day p-0" >{{time | date: 'HH:mm:ss'}}  {{time | date: 'EEEE'}}</div>
+        <div class="user">{{textProp}}</div>
+    </div>
+    
+</div>

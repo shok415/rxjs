@@ -1,0 +1,103 @@
+<div class="ticket-info-wrap">
+    <div>
+        <div class="m-3">
+            <a routerLink="/tickets/tickets-list">Назад</a>
+        </div>       
+        <div class="mt-4">
+            <h4>Информация о туре</h4>
+            {{ticket?.name}}
+        </div>
+
+        <div class="mt-4">
+            <h4>Личная Информация</h4>
+            <div class="mt-3 user-info" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                <div class="mt-3">
+                    <!-- <span class="mx-3">Имя</span> -->
+                    <ng-container *ngTemplateOutlet="userFieldTitle; context:{titleValue:'Имя'}"></ng-container>
+                    <input type="text"
+                    class="mt-3"
+                    pInputText
+                    formControlName="firstName"
+                    />
+                </div>
+
+                <div class="mt-3">
+                    <ng-container *ngTemplateOutlet="userFieldTitle; context:{titleValue:'Фамилия'}"></ng-container>
+                    <!-- <span class="mx-3">Фамилия</span> -->
+                    <input type="text"
+                    class="mt-3"
+                    pInputText
+                    formControlName="lastName"
+                    />
+                </div>
+
+                <div class="mt-3">
+                    <span class="mx-3">Номер карты</span>
+                    <input type="text"
+                    class="mt-3"
+                    pInputText
+                    formControlName="cardNumber"
+                    />
+                </div>
+
+                <div class="mt-3">
+                    <span class="mx-3">Возраст</span>
+                    <p-inputNumber
+                    formControlName="age"
+                    [showButtons]="true">
+                    </p-inputNumber>
+                </div>
+
+                <div class="mt-3">
+                    <span class="mx-3">День рождения</span>
+                    <p-calendar
+                    formControlName="birthDay"
+                    (onSelect)="selectDate($event)">
+                    </p-calendar>
+                </div>
+
+                <div class="mt-3">
+                    <span class="mx-3">Гражданство</span>
+                    <input type="text"
+                    class="mt-3"
+                    pInputText
+                    formControlName="citizen"
+                    />
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn-success btn" type="submit"
+                     (click)="initTour()"
+                     [disabled]="!userForm.valid">Перейти к оформлению</button>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h4>Похожие туры</h4>
+
+            <div>
+                <input #ticketSearch [(ngModel)]="ticketSearchValue" type="text" pInputText />
+            </div>
+
+            <p-carousel [value]="nearestTours">
+                <ng-template pTemplate="header"></ng-template>
+                <ng-template let-tour pTemplate="item">
+                    <p><strong>Название: </strong>{{tour.name}}</p>
+                    <p><strong>Регион: </strong>{{tour.region.name}}</p>
+                    <div class="ticket-img-nearest">
+                        <img class="w-50 h-50" src="/assets/img/{{tour.img}}"/>
+                    </div>
+                </ng-template>
+
+            </p-carousel>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #userFieldTitle let-value="titleValue">
+    <span class="mx-3">{{value}}</span>
+</ng-template>
