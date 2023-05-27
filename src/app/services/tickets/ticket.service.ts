@@ -3,25 +3,29 @@ import { Observable, Subject, map } from 'rxjs';
 import { ICustomTicketData, INearestTour, ITour, ITourLocation, ITourTypeSelect } from 'src/app/modals/tours';
 import { TicketRestService } from '../rest/ticket-rest.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  private ticketSubject = new Subject<ITourTypeSelect>() 
-  constructor(private ticketServiceRest: TicketRestService) { }
+  private ticketSubject = new Subject<ITourTypeSelect>();
 
-  /*
-  getTickets(): Observable<ITour[]>{
-    return this.ticketServiceRest.getTickets().pipe(map(
-      (value) => {
-        const singleTours = value.filter((el)=> el.type === "single");
-        return value.concat(singleTours);
-      }
-    ));
-  }*/
+  private updateTicketsSubject = new Subject<ITour[]>();
+  readonly updateTickets$ = this.updateTicketsSubject.asObservable();
+  constructor(private ticketServiceRest: TicketRestService, 
+    ) { }
+
 
   getError(): Observable<any>{
     return this.ticketServiceRest.getRestError();
+  }
+
+  createTour(body: any) {
+    return this.ticketServiceRest.createTour(body);
+  }
+
+  updateTickets(data: any): void {
+    this.updateTicketsSubject.next(data);
   }
 
   getTickets(): Observable<ITour[]>{ 
@@ -61,6 +65,10 @@ export class TicketService {
 
   getRandomNearestEvent(type:number):Observable<INearestTour>{
     return this.ticketServiceRest.getRandomNearestEvent(type);
+  }
+
+  getNearestTicketsByName(name:string):Observable<INearestTour[]>{
+    return this.ticketServiceRest.getNearestTicketsByName(name);
   }
 
   sendTourData(data:any):Observable<any>{

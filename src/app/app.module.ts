@@ -4,9 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import {AppRoutingModule} from "./app-routing.module";
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { SettingsComponent } from './pages/settings/settings.component';
 import { RestInterceptorsService } from './services/interceptor/rest-interceptors.service';
 import { ConfigService } from './services/configService/config.service';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { ConfigService } from './services/configService/config.service';
       deps: [ConfigService], multi: true
     },
     {provide: HTTP_INTERCEPTORS, useClass: RestInterceptorsService, multi: true},
- 
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

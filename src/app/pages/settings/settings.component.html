@@ -6,14 +6,17 @@
         <p-tabPanel header="Статистика">
             <ng-template pTemplate="content">
                 <app-statistic></app-statistic>
+            </ng-template>           
+        </p-tabPanel>
+        <p-tabPanel header="Загрузка тура">
+            <ng-template pTemplate="content">
+                <app-tour-loader></app-tour-loader>
             </ng-template>
-            
         </p-tabPanel>
         <p-tabPanel header="Смена пароля">
             <ng-template pTemplate="content">
                 <app-change-password></app-change-password>
             </ng-template>
-            
         </p-tabPanel>
     </p-tabView>
 </div>    

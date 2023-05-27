@@ -5,7 +5,12 @@
         </div>       
         <div class="mt-4">
             <h4>Информация о туре</h4>
-            {{ticket?.name}}
+            <p><strong>Название:</strong> {{ticket?.name}}</p>
+            <p><strong>Описание:</strong> {{ticket?.description}}</p>
+            <p><strong>Оператор:</strong> {{ticket?.tourOperator}}</p>
+            <p><strong>Стоимость:</strong> {{ticket?.price}}</p>
+
+        
         </div>
 
         <div class="mt-4">
@@ -76,7 +81,7 @@
         </div>
 
         <div class="mt-4">
-            <h4>Похожие туры</h4>
+            <h4>Другие туры</h4>
 
             <div>
                 <input #ticketSearch [(ngModel)]="ticketSearchValue" type="text" pInputText />
@@ -88,7 +93,7 @@
                     <p><strong>Название: </strong>{{tour.name}}</p>
                     <p><strong>Регион: </strong>{{tour.region.name}}</p>
                     <div class="ticket-img-nearest">
-                        <img class="w-50 h-50" src="/assets/img/{{tour.img}}"/>
+                        <img class="w-50 h-50" src="http://localhost:3000/tour-item/img/{{tour.img}}"/> 
                     </div>
                 </ng-template>
 

@@ -7,6 +7,7 @@ import { TiсketsStorageService } from 'src/app/services/tiсkets-storage/tiсke
 import { ChangeDetectorRef } from '@angular/core';
 import { Subscription, debounce, debounceTime, fromEvent } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ticket-list',
@@ -31,7 +32,8 @@ export class TicketListComponent implements OnInit, AfterContentChecked, OnDestr
     private route: ActivatedRoute,
     private ticketStorage: TiсketsStorageService,
     private userService: UserService,
-    private cdref: ChangeDetectorRef 
+    private cdref: ChangeDetectorRef,
+    private http:HttpClient 
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +45,11 @@ export class TicketListComponent implements OnInit, AfterContentChecked, OnDestr
              this.ticketStorage.setStorage(data);
         }
       )
+      this.ticketService.updateTickets$.subscribe((data) => {
+        this.tickets = data || [];
+      })
+
+
       this.tourUnsubscriber = this.ticketService.ticketType$.subscribe((data: ITourTypeSelect) => {
         console.log('data', data)
         setTimeout(() => {
@@ -101,7 +108,7 @@ export class TicketListComponent implements OnInit, AfterContentChecked, OnDestr
   }
 
   goToTicketInfoPage(item: ITour){
-    this.router.navigate([`/tickets/ticket/${item.id}`])
+    this.router.navigate([`/tickets/ticket/${item._id}`])
   }
 
   ngAfterContentChecked() {
@@ -112,6 +119,6 @@ export class TicketListComponent implements OnInit, AfterContentChecked, OnDestr
  ngOnDestroy() {
   this.tourUnsubscriber.unsubscribe();
   this.searchTicketSub.unsubscribe();
-  this.blockDirective.updateItems();
+  // this.blockDirective.updateItems();
  }
 }

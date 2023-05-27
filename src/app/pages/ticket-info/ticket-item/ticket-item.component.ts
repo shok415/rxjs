@@ -1,7 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, forkJoin, fromEvent } from 'rxjs';
+import { IOrder } from 'src/app/modals/order';
 import { ICustomTicketData, INearestTour, ITour, ITourLocation } from 'src/app/modals/tours';
 import { IUser } from 'src/app/modals/users';
 import { TicketService } from 'src/app/services/tickets/ticket.service';
@@ -20,7 +22,8 @@ export class TicketItemComponent implements OnInit, AfterViewInit {
   constructor(private route: ActivatedRoute,
     private ticketStorage: TiсketsStorageService,
     private userService: UserService,
-    private ticketService: TicketService) { }
+    private ticketService: TicketService,
+    private http:HttpClient) { }
 
     nearestTours: INearestTour[];
     toursLocation: ITourLocation[];
@@ -36,8 +39,11 @@ export class TicketItemComponent implements OnInit, AfterViewInit {
 
     const paramValueId = routeIdParam || queryIdParam;
     if(paramValueId){
-      const ticketStorage = this.ticketStorage.getStorage();
-      this.ticket = ticketStorage.find((el) => el.id === paramValueId);      
+      const ticketStorage = this.ticketStorage.getStorage();   
+      this.http.get<ITour>(`http://localhost:3000/tours/${paramValueId}`).subscribe((data)=>{
+        console.log(data)
+        this.ticket = data;
+      });   
     }
 
     this.user = this.userService.getUser();
@@ -78,10 +84,16 @@ export class TicketItemComponent implements OnInit, AfterViewInit {
     if (this.ticketRestSub && !this.searchTicketSub.closed){
       this.ticketRestSub.unsubscribe();
     }
-
-    this.ticketRestSub = this.ticketService.getRandomNearestEvent(type).subscribe((data) => {
-      this.nearestTours = this.ticketService.transformData([data], this.toursLocation)
+    console.log(this.ticketSearchValue)
+    
+    this.ticketRestSub = this.ticketService.getNearestTicketsByName(this.ticketSearchValue).subscribe((data) => {
+      //this.nearestTours = data
+      this.nearestTours = this.ticketService.transformData(data, this.toursLocation)
     })
+
+    // this.ticketRestSub = this.ticketService.getRandomNearestEvent(type).subscribe((data) => {
+    //   this.nearestTours = this.ticketService.transformData([data], this.toursLocation)
+    // })
   }
 
   transformData(data: INearestTour[], regions: ITourLocation[]): ICustomTicketData[] {
@@ -97,9 +109,19 @@ export class TicketItemComponent implements OnInit, AfterViewInit {
     initTour():void{
       const userData = this.userForm.getRawValue();
       const postData = {...this.ticket,...userData};
+
+        const userId = this.userService.getUser()?.id || null
+        const postObj: IOrder = {
+          age:postData.age,
+          birthDay:postData.birthDay,
+          cardNumber:postData.cardNumber,
+          tourId:postData._id,
+          userId:userId
+        }
+
         console.log('postData',postData)
         console.log('this.userForm.getRawValue()',this.userForm.getRawValue())
       
-      this.ticketService.sendTourData(postData).subscribe()
+      this.ticketService.sendTourData(postObj).subscribe()
     }
 }

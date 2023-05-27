@@ -3,7 +3,8 @@ export interface IUser{
     email?: string,
     password:string,
     cardNumber?:string,
-    token?:string
+    token?:string,
+    id?:string
 } 
 
 export interface IStatisticUser {

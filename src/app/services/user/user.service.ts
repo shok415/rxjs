@@ -34,4 +34,5 @@ export class UserService {
     this.token = null;
     window.localStorage.removeItem('user_token');
    }
+   setToStore(token: string) {  window.localStorage.setItem('userToken', token);}
 }

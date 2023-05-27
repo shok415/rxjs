@@ -56,6 +56,10 @@ export class HeaderComponent implements OnInit {
         visible: this.settingsActive
       },
       {
+        label: 'Заказы',
+        routerLink:['orders']
+      },
+      {
         label: 'Выйти',
         routerLink:['/auth'],
         command: ()=>{

@@ -7,6 +7,7 @@ img:string,
 id:string,
 type: string,
 date: string
+_id:string
 }
 
 export interface ITourTypeSelect {
@@ -16,7 +17,7 @@ export interface ITourTypeSelect {
 }
 
 export interface INearestTour extends ITour{
-   locationId: string
+   locationId?: string
 }
 
 export interface ITourLocation {
